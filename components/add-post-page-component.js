@@ -78,9 +78,9 @@ choosePhotoButtonElement.addEventListener("click", () => {
         description: textAreaElement.value,
         imageUrl: inputElement.value,
       })
-    //   .then(() => {
-    //     getPosts();
-    // })
+      .then(() => {
+        getPosts();
+    })
       .then(() => {
         choosePhotoButtonElement.disabled = false;
         choosePhotoButtonElement.textContent = "Добавить";
