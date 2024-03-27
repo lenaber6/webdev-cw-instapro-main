@@ -1,6 +1,10 @@
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
-const personalKey = "prod";
+
+import { getToken } from "./index.js";
+
+// const personalKey = "prod";
+const personalKey = "helen-bersh";
 const baseHost = "https://wedev-api.sky.pro";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
 
@@ -15,18 +19,18 @@ export async function getPosts({ token }) {
     throw new Error("Нет авторизации");
   }
   const data = await response.json();
-  return data.posts;
+  return data.posts; 
 }
 
-export async function postPost({token, description, imageUrl}) {
+export async function postPost({description, imageUrl}) {
   const response = await fetch(postsHost + "/", {
     method: "POST",
     body: JSON.stringify({
-        description: description,
-        imageUrl: imageUrl,
+         description,
+         imageUrl,
     }),
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: getToken(),
     },
   });
   if (response.status === 201) {
