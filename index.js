@@ -13,6 +13,7 @@ import { renderLoadingPageComponent } from "./components/loading-page-component.
 import {
   getUserFromLocalStorage,
   removeUserFromLocalStorage,
+  sanitizeHtml,
   saveUserToLocalStorage,
 } from "./helpers.js";
 
@@ -111,6 +112,7 @@ const renderApp = () => {
       appEl,
       onAddPostClick({ description, imageUrl }) {
         // TODO: реализовать добавление поста в API
+        renderAddPostPageComponent();
         console.log("Добавляю пост...", { description, imageUrl });
         goToPage(POSTS_PAGE);
       },

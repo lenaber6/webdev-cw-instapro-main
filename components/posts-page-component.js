@@ -2,19 +2,36 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage } from "../index.js";
+import { formatDistance } from "date-fns";
+import { ru } from "date-fns/locale";
+import { initLikeListener } from "./init-like-listener.js";
 
 export function renderPostsPageComponent() {
   // TODO: реализовать рендер постов из api
   //console.log("Актуальный список постов:", posts);
   //  * TODO: чтобы отформатировать дату создания поста в виде "19 минут назад"
   //  * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
-
+  let likeImg;
+  let likes;
 const appElement = document.getElementById("app");
   const appEl = posts
     .map((post, index) => {
+      if (post.likes.length === 1) {
+        likes = post.likes[0].name;
+      } else if (post.likes.length > 1) {
+        likes = `${post.likes[0].name} и еще ${post.likes.length - 1}`;
+      } else {
+        likes = "";
+      }
+
+      if (post.isLiked) {
+        likeImg = '<img src="./assets/images/like-active.svg"></img>';
+      } else {
+        likeImg = '<img src="./assets/images/like-not-active.svg"></img>';
+      }
       return `
      
-             <li class="post">
+             <li class="post" id="post">
                     <div class="post-header" data-user-id="${post.user.id}">
                         <img src="${post.user.imageUrl}" class="post-header__user-image">
                         <p class="post-header__user-name">${post.user.name}</p>
@@ -23,15 +40,16 @@ const appElement = document.getElementById("app");
                       <img class="post-image" src="${post.imageUrl}">
                     </div>
                     <div class="post-likes">
-                      <button data-post-id="${post.id}" class="like-button
+                      <button data-post-id="${post.id}" data-is-liked="${post.isLiked}" class="like-button
                       ${
                         post[index].isliked
                           ? "like-active"
                           : ""
-                      }">
+                      }" "data-index="${post.user.id}">
+                      ${likeImg}
                       </button>
                       <p class="post-likes-text">
-                        Нравится: <strong>2</strong>
+                        Нравится: <strong>${likes}</strong>
                       </p>
                     </div>
                     <p class="post-text">
@@ -39,7 +57,7 @@ const appElement = document.getElementById("app");
                       ${post.description}
                     </p>
                     <p class="post-date">
-                      ${post.createdAt}
+                    ${formatDistance(post.createdAt, new Date(), { addSuffix: true, locale: ru })}
                     </p>
                   </li>
            `;
@@ -65,4 +83,5 @@ const appElement = document.getElementById("app");
       });
     });
   }
+  initLikeListener();
 }

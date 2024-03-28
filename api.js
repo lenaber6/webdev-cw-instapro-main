@@ -5,11 +5,13 @@ import { getToken } from "./index.js";
 
 // const personalKey = "prod";
 const personalKey = "helen-bersh";
-const baseHost = "https://wedev-api.sky.pro";
+const baseHost = "https://webdev-hw-api.vercel.app";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
+const userHost = `${baseHost}/api/v1/${personalKey}/instapro/user-posts`;
+
 
 export async function getPosts({ token }) {
-  const response = await fetch(postsHost + "/", {
+  const response = await fetch(postsHost, {
     method: "GET",
     headers: {
       Authorization: token,
@@ -22,8 +24,23 @@ export async function getPosts({ token }) {
   return data.posts; 
 }
 
+export async function getUserPosts({ id}) {
+  console.log(id)
+  const response = await fetch(`${userHost}/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: getToken(),
+    },
+  });
+  if (response.status === 401) {
+    throw new Error("Нет авторизации");
+  }
+  const data_1 = await response.json();
+  return data_1.posts;
+}
+
 export async function postPost({description, imageUrl}) {
-  const response = await fetch(postsHost + "/", {
+  const response = await fetch(postsHost, {
     method: "POST",
     body: JSON.stringify({
          description,
@@ -34,11 +51,43 @@ export async function postPost({description, imageUrl}) {
     },
   });
   if (response.status === 201) {
-    return response.json({ "result": "ok" });
+    return response.json();
 } else if (response.status === 400) {
   alert("Введите описание картинки и/или добавьте ссылку на фото");
     throw new Error("Введите описание картинки и/или добавьте ссылку на фото");
 }}
+
+export async function deletePost({ id }) {
+  const response = await fetch(`${postsHost}/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: getToken(),
+    },
+  });
+  return await response.json();
+}
+
+export async function like({ id }) {
+  console.log(id);
+  const response = await fetch(`${postsHost}/${id}/like`, {
+    method: "POST",
+    headers: {
+      Authorization: getToken(),
+    },
+  });
+  const data_1 = await response.json();
+  return data_1.post;
+}
+
+export async function disLike({ id}) {
+  const response = await fetch(`${postsHost}/${id}/dislike`, {
+    method: "POST",
+    headers: {
+      Authorization: getToken(),
+    },
+  });
+  return await response.json();
+}
 
 // https://github.com/GlebkaF/webdev-hw-api/blob/main/pages/api/user/README.md#%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B8%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%D1%81%D1%8F
 export async function registerUser({ login, password, name, imageUrl }) {

@@ -1,26 +1,15 @@
 // Модуль добавляет новые посты
 import { postPost } from "../api.js";
+import { sanitizeHtml } from "../helpers.js";
 import { user } from "../index.js";
+import { renderHeaderComponent } from "./header-component.js";
 
 export function renderAddPostPageComponent({ appEl }) {
-  const render = () => {
+  // let imageUrl = "";
+     const render = () => {
     // TODO: Реализовать страницу добавления поста
+
     const appHtml = `
-    <div class="page-header">
-      <h1 class="logo">instapro</h1>
-      <button class="header-button add-or-login-button">
-      ${
-        user
-          ? `<div title="Добавить пост" class="add-post-sign"></div>`
-          : "Войти"
-      }
-      </button>
-      ${
-        user
-          ? `<button title="${user.name}" class="header-button logout-button">Выйти</button>`
-          : ""
-      }  
-  </div>
     <div class="page-container">
       <div class="header-container"></div>
           <div class="form">
@@ -50,6 +39,7 @@ export function renderAddPostPageComponent({ appEl }) {
   `;
 
     appEl.innerHTML = appHtml;
+    
 
     const inputElement = document.getElementById("choose-photo");
     const textAreaElement = document.getElementById("add-text");
@@ -75,7 +65,7 @@ choosePhotoButtonElement.addEventListener("click", () => {
   choosePhotoButtonElement.textContent = "Пост добавляется...";
 
      postPost({
-        description: textAreaElement.value,
+        description: sanitizeHtml(textAreaElement.value),
         imageUrl: inputElement.value,
       })
       .then(() => {
@@ -98,4 +88,16 @@ choosePhotoButtonElement.addEventListener("click", () => {
   addPost();
   };
   render();
+  renderHeaderComponent({ element: document.querySelector(".header-container") });
+  
+  const uploadImageContainer = appEl.querySelector(".upload-image-container");
+  if (uploadImageContainer) {
+    renderUploadImageComponent({
+      element: appEl.querySelector(".upload-image-container"),
+      onImageUrlChange(newImageUrl) {
+        imageUrl = newImageUrl;
+      },
+    });
+  }
+  uploadImageContainer();
 }
