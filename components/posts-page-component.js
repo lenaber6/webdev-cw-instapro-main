@@ -2,9 +2,11 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage } from "../index.js";
-import { formatDistance } from "date-fns";
-import { ru } from "date-fns/locale";
+import { formatDistance } from "../node_modules/date-fns";
+import { ru } from "../node_modules/date-fns/locale.js";
 import { initLikeListener } from "./init-like-listener.js";
+// import { ru } from "date-fns/locale.js";
+// import { formatDistance } from "date-fns";
 
 export function renderPostsPageComponent() {
   // TODO: реализовать рендер постов из api

@@ -1,7 +1,9 @@
 import { renderHeaderComponent } from "./header-component.js";
-import { formatDistance } from "date-fns";
-import { ru } from "date-fns/locale";
+import { formatDistance } from "../node_modules/date-fns";
+import { ru } from "../node_modules/date-fns/locale.js";
 import { initLikeListener } from "./init-like-listener.js";
+// import { ru } from "date-fns/locale.js";
+// import { formatDistance } from "date-fns";
 
 export function renderUserPostsPage({ posts }) {
   // TODO: реализован рендер постов из api
