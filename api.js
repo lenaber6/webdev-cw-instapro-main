@@ -3,8 +3,8 @@
 
 import { getToken } from "./index.js";
 
-// const personalKey = "prod";
-const personalKey = "helen-bersh";
+ const personalKey = "prod";
+// const personalKey = "helen-bersh";
 const baseHost = "https://webdev-hw-api.vercel.app";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
 const userHost = `${baseHost}/api/v1/${personalKey}/instapro/user-posts`;

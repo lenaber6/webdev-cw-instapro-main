@@ -13,7 +13,6 @@ import { renderLoadingPageComponent } from "./components/loading-page-component.
 import {
   getUserFromLocalStorage,
   removeUserFromLocalStorage,
-  sanitizeHtml,
   saveUserToLocalStorage,
 } from "./helpers.js";
 

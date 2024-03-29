@@ -3,6 +3,7 @@ import { postPost } from "../api.js";
 import { sanitizeHtml } from "../helpers.js";
 import { user } from "../index.js";
 import { renderHeaderComponent } from "./header-component.js";
+import { renderUploadImageComponent } from "./upload-image-component.js";
 
 export function renderAddPostPageComponent({ appEl }) {
   // let imageUrl = "";
