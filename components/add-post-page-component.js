@@ -47,9 +47,9 @@ export function renderAddPostPageComponent({ appEl }) {
 
     function addPost() {
    const choosePhotoButtonElement = document.getElementById("add-button");
-   if (!choosePhotoButtonElement) {
-    return;
-}
+//    if (!choosePhotoButtonElement) {
+//     return;
+// }
 choosePhotoButtonElement.addEventListener("click", () => {
   inputElement.remove("form-error");
   textAreaElement.remove("form-error");
@@ -65,6 +65,15 @@ choosePhotoButtonElement.addEventListener("click", () => {
   choosePhotoButtonElement.disabled = true;
   choosePhotoButtonElement.textContent = "Пост добавляется...";
 
+  const uploadImageContainer = appEl.querySelector(".upload-image-container");
+  if (uploadImageContainer) {
+    renderUploadImageComponent({
+      element: appEl.querySelector(".upload-image-container"),
+      onImageUrlChange(newImageUrl) {
+        imageUrl = newImageUrl;
+      },
+    });
+  };
      postPost({
         description: sanitizeHtml(textAreaElement.value),
         imageUrl: inputElement.value,
@@ -73,8 +82,7 @@ choosePhotoButtonElement.addEventListener("click", () => {
         getPosts();
     })
       .then(() => {
-        choosePhotoButtonElement.disabled = false;
-        choosePhotoButtonElement.textContent = "Добавить";
+       
         inputElement.value = "";
         textAreaElement.value = "";
     })
@@ -91,14 +99,6 @@ choosePhotoButtonElement.addEventListener("click", () => {
   render();
   renderHeaderComponent({ element: document.querySelector(".header-container") });
   
-  const uploadImageContainer = appEl.querySelector(".upload-image-container");
-  if (uploadImageContainer) {
-    renderUploadImageComponent({
-      element: appEl.querySelector(".upload-image-container"),
-      onImageUrlChange(newImageUrl) {
-        imageUrl = newImageUrl;
-      },
-    });
-  }
-  uploadImageContainer();
-}
+  
+};
+renderAddPostPageComponent();

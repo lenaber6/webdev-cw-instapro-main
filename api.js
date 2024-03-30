@@ -1,13 +1,16 @@
 // Замени на свой, чтобы получить независимый от других набор данных.
 // "боевая" версия инстапро лежит в ключе prod
 
+import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
 import { getToken } from "./index.js";
 
  const personalKey = "prod";
 // const personalKey = "helen-bersh";
-const baseHost = "https://webdev-hw-api.vercel.app";
+// const baseHost = "https://webdev-hw-api.vercel.app";
+const baseHost = "https://wedev-api.sky.pro";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;
 const userHost = `${baseHost}/api/v1/${personalKey}/instapro/user-posts`;
+// const uploadImage = "https://wedev-api.sky.pro/api/upload/image";
 
 
 export async function getPosts({ token }) {
@@ -42,20 +45,28 @@ export async function getUserPosts({ id}) {
 export async function postPost({description, imageUrl}) {
   const response = await fetch(postsHost, {
     method: "POST",
-    body: JSON.stringify({
-         description,
-         imageUrl,
-    }),
     headers: {
       Authorization: getToken(),
     },
-  });
-  if (response.status === 201) {
-    return response.json();
-} else if (response.status === 400) {
-  alert("Введите описание картинки и/или добавьте ссылку на фото");
-    throw new Error("Введите описание картинки и/или добавьте ссылку на фото");
-}}
+    body: JSON.stringify({
+      description: sanitizeHtml(textAreaElement.value),
+      imageUrl: inputElement.value,
+    })   
+  })
+  .then((response) => {
+    if (response.status === 201) {
+      return response.json()
+  }  else if (response.status === 400) {
+    alert("Введите описание картинки и/или добавьте ссылку на фото");
+      throw new Error("Введите описание картинки и/или добавьте ссылку на фото");
+  }
+}) 
+    .then((data) => {
+      return response.data;
+    });
+    renderAddPostPageComponent();
+
+}
 
 export async function deletePost({ id }) {
   const response = await fetch(`${postsHost}/${id}`, {
