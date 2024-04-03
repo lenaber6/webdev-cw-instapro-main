@@ -11,7 +11,7 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
         imageUrl
           ? `
           <div class="file-upload-image-conrainer">
-            <img class="file-upload-image" src="${post.imageUrl}">
+            <img class="file-upload-image" src="${imageUrl}">
             <button class="file-upload-remove-button button">Заменить фото</button>
           </div>
           `
@@ -19,6 +19,7 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
             <label class="file-upload-label secondary-button">
                 <input
                   type="file"
+                  id="image-input"
                   class="file-upload-input"
                   style="display:none"
                 />
@@ -30,10 +31,12 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
   </div>
 `;
 
-    const fileInputElement = element.querySelector(".file-upload-input");
+    // const fileInputElement = element.querySelector(".file-upload-input");
+     const fileInputElement = document.getElementById("image-input");
 
     fileInputElement?.addEventListener("change", () => {
       const file = fileInputElement.files[0];
+      console.log(file);
       if (file) {
         const lableEl = document.querySelector(".file-upload-label");
         lableEl.setAttribute("disabled", true);
@@ -46,8 +49,28 @@ export function renderUploadImageComponent({ element, onImageUrlChange }) {
       }
     });
 
-    element
-      .querySelector(".file-upload-remove-button")
+
+    // <input type="file" id="image-input" />
+// const fileInputElement = document.getElementById("image-input");
+// postImage({ file: fileInputElement.files[0] });
+
+// function postImage({ file }) {
+//   const data = new FormData();
+//   data.append("file", file);
+
+//   return fetch(baseHost + "/api/upload/image", {
+//     method: "POST",
+//     body: data,
+//   })
+//     .then((response) => {
+//       return response.json();
+//     })
+//     .then((data) => {
+//       console.log(data.fileUrl);
+//     });
+// }
+
+    element.querySelector(".file-upload-remove-button")
       ?.addEventListener("click", () => {
         imageUrl = "";
         onImageUrlChange(imageUrl);

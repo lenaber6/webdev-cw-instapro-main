@@ -109,9 +109,8 @@ const renderApp = () => {
   if (page === ADD_POSTS_PAGE) {
     return renderAddPostPageComponent({
       appEl,
-      onAddPostClick({ description, imageUrl }) {
+      postPost({ description, imageUrl }) {
         // TODO: реализовать добавление поста в API
-        renderAddPostPageComponent();
         console.log("Добавляю пост...", { description, imageUrl });
         goToPage(POSTS_PAGE);
       },

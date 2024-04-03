@@ -2,6 +2,7 @@
 // "боевая" версия инстапро лежит в ключе prod
 
 import { renderAddPostPageComponent } from "./components/add-post-page-component.js";
+import { sanitizeHtml } from "./helpers.js";
 import { getToken } from "./index.js";
 
  const personalKey = "prod";
@@ -49,8 +50,8 @@ export async function postPost({description, imageUrl}) {
       Authorization: getToken(),
     },
     body: JSON.stringify({
-      description: sanitizeHtml(textAreaElement.value),
-      imageUrl: inputElement.value,
+      description: sanitizeHtml(description),
+      imageUrl,
     })   
   })
   .then((response) => {
@@ -62,9 +63,9 @@ export async function postPost({description, imageUrl}) {
   }
 }) 
     .then((data) => {
-      return response.data;
+      return data;
     });
-    renderAddPostPageComponent();
+    // renderAddPostPageComponent();
 
 }
 
@@ -133,12 +134,17 @@ export async function loginUser({ login, password }) {
 
 // Загружает картинку в облако, возвращает url загруженной картинки
 export async function uploadImage({ file }) {
-  const data = new FormData();
-  data.append("file", file);
-
-  const response = await fetch(baseHost + "/api/upload/image", {
-    method: "POST",
-    body: data,
-  });
-  return await response.json();
-}
+    const data = new FormData();
+    data.append("file", file);
+  
+    return fetch(baseHost + "/api/upload/image", {
+      method: "POST",
+      body: data,
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+       return data;
+      });
+  }

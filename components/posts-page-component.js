@@ -15,9 +15,10 @@ export function renderPostsPageComponent() {
   //  * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
   let likeImg;
   let likes;
+  console.log(posts);
 const appElement = document.getElementById("app");
   const appEl = posts
-    .map((post, index) => {
+    .map((post) => {
       if (post.likes.length === 1) {
         likes = post.likes[0].name;
       } else if (post.likes.length > 1) {
@@ -25,7 +26,7 @@ const appElement = document.getElementById("app");
       } else {
         likes = "";
       }
-
+console.log(post);
       if (post.isLiked) {
         likeImg = '<img src="./assets/images/like-active.svg"></img>';
       } else {
@@ -44,7 +45,7 @@ const appElement = document.getElementById("app");
                     <div class="post-likes">
                       <button data-post-id="${post.id}" data-is-liked="${post.isLiked}" class="like-button
                       ${
-                        post[index].isLiked
+                        post.isLiked
                           ? "like-active"
                           : ""
                       }" "data-index="${post.user.id}">
