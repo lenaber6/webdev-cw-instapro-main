@@ -1,26 +1,17 @@
 // Модуль добавляет новые посты
 import { postPost } from "../api.js";
-import { user } from "../index.js";
+import { sanitizeHtml } from "../helpers.js";
+import { goToPage, user } from "../index.js";
+import { POSTS_PAGE } from "../routes.js";
+import { renderHeaderComponent } from "./header-component.js";
+import { renderUploadImageComponent } from "./upload-image-component.js";
 
-export function renderAddPostPageComponent({ appEl }) {
-  const render = () => {
+export function renderAddPostPageComponent({ appEl}) {
+     let imageUrl = "";
+     const render = () => {
     // TODO: Реализовать страницу добавления поста
+
     const appHtml = `
-    <div class="page-header">
-      <h1 class="logo">instapro</h1>
-      <button class="header-button add-or-login-button">
-      ${
-        user
-          ? `<div title="Добавить пост" class="add-post-sign"></div>`
-          : "Войти"
-      }
-      </button>
-      ${
-        user
-          ? `<button title="${user.name}" class="header-button logout-button">Выйти</button>`
-          : ""
-      }  
-  </div>
     <div class="page-container">
       <div class="header-container"></div>
           <div class="form">
@@ -30,18 +21,10 @@ export function renderAddPostPageComponent({ appEl }) {
               <div class="form-inputs">
     
                       <div class="upload-image-container"></div>
-                      <label class="file-upload-label secondary-button">
-                      <input
-                        value="${user?.imageUrl}"
-                        id="choose-photo"
-                        type="file"
-                        class="file-upload-input"
-                        style="display:none"
-                      />
-                      Выберите фото
-                  </label>
-                    <p class="post-text">Опишите фотографию:</p> 
-                      <input type="text" id="add-text" value="${user.description}" class="textarea" />
+                  <label class="post-text">
+                  Опишите фотографию:
+                      <textarea  id="add-text" value="${user.description}" class="textarea"></textarea>
+                      </label>
                     <div class="form-error"></div>
                   <button class="button" id="add-button">Добавить</button>
               </div>
@@ -50,52 +33,59 @@ export function renderAddPostPageComponent({ appEl }) {
   `;
 
     appEl.innerHTML = appHtml;
-
-    const inputElement = document.getElementById("choose-photo");
     const textAreaElement = document.getElementById("add-text");
 
-    function addPost() {
+  //   function addPost() {
    const choosePhotoButtonElement = document.getElementById("add-button");
    if (!choosePhotoButtonElement) {
     return;
 }
 choosePhotoButtonElement.addEventListener("click", () => {
-  inputElement.remove("form-error");
-  textAreaElement.remove("form-error");
+  textAreaElement.classList.remove("form-error");
 
-  if (inputElement.value === "") {
-      inputElement.add("form-error");
       if (textAreaElement.value === "") {
-          textAreaElement.add("form-error");
+          textAreaElement.classList.add("form-error");
           return;
       }
-      return;
-  }
-  choosePhotoButtonElement.disabled = true;
-  choosePhotoButtonElement.textContent = "Пост добавляется...";
-
-     postPost({
-        description: textAreaElement.value,
-        imageUrl: inputElement.value,
-      })
-    //   .then(() => {
-    //     getPosts();
-    // })
-      .then(() => {
-        choosePhotoButtonElement.disabled = false;
-        choosePhotoButtonElement.textContent = "Добавить";
-        inputElement.value = "";
-        textAreaElement.value = "";
-    })
-    .catch((error) => {
-        // В catch-обработчике включаем обратно кнопку, чтобы пользователю можно было работать дальше после ошибки.
-        choosePhotoButtonElement.disabled = false;
-        choosePhotoButtonElement.textContent = "Добавить";
-        console.warn(error);
-    });
+     
+  postPost({
+    description: sanitizeHtml(textAreaElement.value),
+    imageUrl,
+  })
+  .then(() => {
+    goToPage(POSTS_PAGE);
+})
+  .then(() => {
+   
+    textAreaElement.value = "";
+})
+.catch((error) => {
+    // В catch-обработчике включаем обратно кнопку, чтобы пользователю можно было работать дальше после ошибки.
+    choosePhotoButtonElement.disabled = false;
+    choosePhotoButtonElement.textContent = "Добавить";
+    console.warn(error);
+});
+  // choosePhotoButtonElement.disabled = true;
+  // choosePhotoButtonElement.textContent = "Файл добавляется...";
+});
+  const uploadImageContainer = appEl.querySelector(".upload-image-container");
+  console.log(555);
+  if (uploadImageContainer) {
+    renderUploadImageComponent({
+      element: appEl.querySelector(".upload-image-container"),
+      onImageUrlChange(newImageUrl) {
+        imageUrl = newImageUrl;
+      },
     });
   };
-  addPost();
+    
+    // });
+  // };
+  // addPost();
   };
   render();
-}
+  renderHeaderComponent({ element: document.querySelector(".header-container") });
+  
+  
+};
+// renderAddPostPageComponent();
