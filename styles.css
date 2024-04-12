@@ -97,9 +97,9 @@
   padding-bottom: 5px;
   cursor: pointer;
 }
-.like-active {
-  /* background-image: url(assets/images/like-active.svg) */
-}
+/* .like-active {
+  background-image: url(assets/images/like-active.svg)
+} */
 .like-not-active {
   background-image: url(assets/images/like-not-active.svg)
 }

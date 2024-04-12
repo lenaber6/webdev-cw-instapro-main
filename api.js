@@ -5,8 +5,8 @@ import { renderAddPostPageComponent } from "./components/add-post-page-component
 import { sanitizeHtml } from "./helpers.js";
 import { getToken } from "./index.js";
 
- const personalKey = "prod";
-// const personalKey = "helen-bersh";
+//  const personalKey = "prod";
+const personalKey = "helen-bersh";
 // const baseHost = "https://webdev-hw-api.vercel.app";
 const baseHost = "https://wedev-api.sky.pro";
 const postsHost = `${baseHost}/api/v1/${personalKey}/instapro`;

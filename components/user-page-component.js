@@ -1,5 +1,5 @@
 import { renderHeaderComponent } from "./header-component.js";
-import { formatDistance } from "../node_modules/date-fns";
+import { formatDistanceToNow } from "../node_modules/date-fns";
 import { ru } from "../node_modules/date-fns/locale.js";
 import { initLikeListener } from "./init-like-listener.js";
 // import { ru } from "date-fns/locale.js";
@@ -7,7 +7,7 @@ import { initLikeListener } from "./init-like-listener.js";
 
 export function renderUserPostsPage({ posts }) {
   // TODO: реализован рендер постов из api
-  console.log("Cписок постов юзера :", posts);
+  // console.log("Cписок постов юзера :", posts);
   let likeImg;
   let likes;
   
@@ -46,7 +46,7 @@ export function renderUserPostsPage({ posts }) {
           <button  class="delete-form-button header-button logout-button" style="display:none" data-id="${post.id}">Удалить пост</button>
         </div>
         <p class="post-text"><span class="user-name">${post.user.name}</span>: ${post.description} </p>
-        <p class="post-date">${formatDistance(post.createdAt, {locale: ru})}</p>
+        <p class="post-date">${formatDistanceToNow(new Date(post.createdAt), {addSuffix: true, locale: ru})}</p>
       </li>`;
     })
     .join("");
@@ -64,6 +64,7 @@ export function renderUserPostsPage({ posts }) {
   renderHeaderComponent({
     element: document.querySelector(".header-container"),
   });
+  console.log(posts);
   initLikeListener(posts[0].user.id);
   
 }

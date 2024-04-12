@@ -2,7 +2,7 @@
 import { USER_POSTS_PAGE } from "../routes.js";
 import { renderHeaderComponent } from "./header-component.js";
 import { posts, goToPage } from "../index.js";
-import { formatDistance } from "../node_modules/date-fns";
+import { formatDistanceToNow } from "../node_modules/date-fns";
 import { ru } from "../node_modules/date-fns/locale.js";
 import { initLikeListener } from "./init-like-listener.js";
 // import { ru } from "date-fns/locale.js";
@@ -15,7 +15,7 @@ export function renderPostsPageComponent() {
   //  * можно использовать https://date-fns.org/v2.29.3/docs/formatDistanceToNow
   let likeImg;
   let likes;
-  console.log(posts);
+  // console.log(posts);
 const appElement = document.getElementById("app");
   const appEl = posts
     .map((post) => {
@@ -26,7 +26,7 @@ const appElement = document.getElementById("app");
       } else {
         likes = "";
       }
-console.log(post);
+// console.log(post);
       if (post.isLiked) {
         likeImg = '<img src="./assets/images/like-active.svg"></img>';
       } else {
@@ -60,7 +60,7 @@ console.log(post);
                       ${post.description}
                     </p>
                     <p class="post-date">
-                    ${formatDistance(post.createdAt, new Date(), { addSuffix: true, locale: ru })}
+                    ${formatDistanceToNow( new Date(post.createdAt), { addSuffix: true, locale: ru })}
                     </p>
                   </li>
            `;

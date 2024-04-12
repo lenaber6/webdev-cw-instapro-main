@@ -1,4 +1,4 @@
-import { POSTS_PAGE, USER_POSTS_PAGE, } from "../routes.js";
+import { POSTS_PAGE, USER_POSTS_PAGE } from "../routes.js";
 import { goToPage, getToken } from "../index.js";
 import { disLike, like } from "../api.js";
 
@@ -8,32 +8,31 @@ export function initLikeListener(userId) {
     likeElement.addEventListener("click", () => {
       if (likeElement.dataset.isLiked === "true") {
         disLike({
-          id: likeElement.dataset.postId, token: getToken()
-        })
-        .then(() => {
+          id: likeElement.dataset.postId,
+          token: getToken(),
+        }).then((updatedPost) => {
+          console.log(updatedPost);
           if (userId) {
-            goToPage(USER_POSTS_PAGE, { userId })
+            goToPage(USER_POSTS_PAGE, { userId });
+          } else {
+            goToPage(POSTS_PAGE, { noLoading: true });
           }
-          else {
-            goToPage(POSTS_PAGE, { noLoading: true })
-          }
-        })
-      }
-      else {
+        });
+      } else {
         like({
-          id: likeElement.dataset.postId, token: getToken()
-        })
-        .then(() => {
+          id: likeElement.dataset.postId,
+          token: getToken(),
+        }).then((updatedPost) => {
+          console.log(updatedPost);
+
           if (userId) {
-            goToPage(USER_POSTS_PAGE, { userId })
-          }
-          else {
-            goToPage(POSTS_PAGE, { noLoading: true })
+            goToPage(USER_POSTS_PAGE, { userId });
+          } else {
+            goToPage(POSTS_PAGE, { noLoading: true });
           }
         });
       }
-    })
+    });
   }
-  
 }
 initLikeListener();
